@@ -19,12 +19,10 @@ public class Main {
 
         System.out.println("=== Etapa 3: não emprestar duas vezes ===");
         Leitor bruno = new Leitor("Bruno Lima", "2026002");
-        // try/catch permite mostrar a recusa sem interromper o programa.
-        try {
-            new Emprestimo(livro, bruno);
-        } catch (IllegalStateException erro) {
-            System.out.println(erro.getMessage());
-        }
+        // O objeto é criado, mas o empréstimo recusado não fica ativo.
+        Emprestimo tentativa = new Emprestimo(livro, bruno);
+        tentativa.exibirResumo();
+        tentativa.devolver(); // não libera o livro do empréstimo de Ana
 
         System.out.println("=== Etapa 4: devolução e novo empréstimo ===");
         primeiro.devolver(); // libera o livro
