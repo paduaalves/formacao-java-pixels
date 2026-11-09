@@ -6,24 +6,27 @@ public class Emprestimo {
     // não cópias do livro e do leitor.
     private Livro livro;
     private Leitor leitor;
-    // boolean guarda true (ativo) ou false (devolvido).
-    private boolean ativo;
+    private String status;
 
     // O construtor associa objetos que foram criados antes do empréstimo.
     public Emprestimo(Livro livro, Leitor leitor) {
+        // O objeto existe mesmo se a tentativa for recusada.
+        // Neste caso, ele fica com status NÃO REALIZADO, sem reservar o livro.
+        this.livro = livro;
+        this.leitor = leitor;
+        this.status = "NÃO REALIZADO";
+
         // null indica ausência de objeto; || significa "ou".
         if (livro == null || leitor == null) {
-            // A exceção interrompe a criação com argumentos ausentes.
-            throw new IllegalArgumentException("Informe livro e leitor.");
+            System.out.println("Informe livro e leitor.");
+            return;
         }
         // Tenta reservar o livro. Se o método retornar false, recusa.
         if (!livro.emprestar()) {
-            throw new IllegalStateException("Livro já emprestado: " + livro.getTitulo());
+            System.out.println("Livro já emprestado: " + livro.getTitulo());
+            return;
         }
-        // Depois das validações, guarda as referências e ativa o empréstimo.
-        this.livro = livro;
-        this.leitor = leitor;
-        this.ativo = true;
+        this.status = "ATIVO";
     }
 
     // Os getters permitem consultar quais objetos estão associados.
@@ -37,19 +40,24 @@ public class Emprestimo {
 
     // Uma devolução válida libera o livro e encerra este empréstimo.
     public void devolver() {
-        // return encerra o método e evita devolver novamente.
-        if (!ativo) {
-            System.out.println("Empréstimo já devolvido.");
+        // Só um empréstimo ativo pode liberar o livro.
+        // return encerra o método quando a operação não é permitida.
+        if (!status.equals("ATIVO")) {
+            System.out.println("Não dá para devolver: empréstimo " + status + ".");
             return;
         }
         livro.devolver();
-        ativo = false;
+        status = "DEVOLVIDO";
         System.out.println("Livro devolvido: " + livro.getTitulo());
     }
 
-    // O operador ? escolhe o texto de acordo com o valor de ativo.
     public void exibirResumo() {
+        // Uma tentativa com dados ausentes também pode ser exibida com segurança.
+        if (livro == null || leitor == null) {
+            System.out.println("Empréstimo " + status + ".");
+            return;
+        }
         System.out.println(livro.getTitulo() + " | " + leitor.getNome()
-                + " | " + (ativo ? "ATIVO" : "DEVOLVIDO"));
+                + " | " + status);
     }
 }
