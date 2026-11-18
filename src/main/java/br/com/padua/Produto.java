@@ -1,7 +1,7 @@
 package br.com.padua;
 
 /*
- * PRODUTO (versão da aula 07)
+ * PRODUTO (versão da aula 08)
  *
  * O que mudou em relação à versão das aulas 05/06:
  *
@@ -12,6 +12,10 @@ package br.com.padua;
  *
  * 2. Associação (aula 07): categoria deixou de ser String e passou a ser
  *    um objeto Categoria. Produto "tem uma" referência para Categoria.
+ *
+ * 3. Herança (aula 08): Produto passa a ser a classe MÃE de ProdutoDigital.
+ *    Nada mudou aqui dentro: a filha herda tudo e sobrescreve só
+ *    temEstoque e baixarEstoque.
  */
 public class Produto {
 
