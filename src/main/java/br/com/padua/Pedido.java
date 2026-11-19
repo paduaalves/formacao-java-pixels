@@ -31,12 +31,14 @@ public class Pedido {
     private List<ItemPedido> itens;           // composição
     private Double percentualDesconto;
     private Boolean fechado;
+    private Boolean pago;
 
     public Pedido(Cliente cliente) {
         this.cliente = cliente;
         this.itens = new ArrayList<>();
         this.percentualDesconto = 0.0;
         this.fechado = false;
+        this.pago = false;
     }
 
     public Cliente getCliente() {
@@ -47,7 +49,14 @@ public class Pedido {
         return fechado;
     }
 
+    public Boolean isPago() {
+        return pago;
+    }
+
     public String getStatus() {
+        if (pago) {
+            return "PAGO";
+        }
         if (fechado) {
             return "FECHADO";
         }
@@ -87,6 +96,43 @@ public class Pedido {
 
     public Double calcularTotal() {
         return calcularSubtotal() * (1 - percentualDesconto / 100.0);
+    }
+
+    // Frete do pedido: soma o frete de cada produto (polimorfismo, aula 09).
+    public Double calcularFrete() {
+        Double frete = 0.0;
+        for (ItemPedido item : itens) {
+            frete += item.getProduto().calcularFrete() * item.getQuantidade();
+        }
+        return frete;
+    }
+
+    public Double calcularTotalComFrete() {
+        return calcularTotal() + calcularFrete();
+    }
+
+    /*
+     * PAGAR (aula 09): o Pedido só conhece o CONTRATO Pagamento.
+     * Pode chegar Pix, cartão, boleto ou uma forma que ainda nem existe:
+     * este método não muda. Quem decide COMO cobrar é o objeto recebido.
+     */
+    public void pagar(Pagamento pagamento) {
+        if (!fechado) {
+            System.out.println("Feche o pedido antes de pagar.");
+            return;
+        }
+        if (pago) {
+            System.out.println("Pedido já está pago.");
+            return;
+        }
+        Double valorFinal = pagamento.calcularValorFinal(calcularTotalComFrete());
+        System.out.println("Pagando com " + pagamento.getNome() + ": R$ " + String.format("%.2f", valorFinal));
+        if (pagamento.processar(valorFinal)) {
+            this.pago = true;
+            System.out.println("Pedido de " + cliente.getNome() + " PAGO.");
+        } else {
+            System.out.println("Pagamento não aprovado. O pedido continua " + getStatus() + ".");
+        }
     }
 
     // Fechar: baixa o estoque de cada produto e trava o pedido.

@@ -45,4 +45,10 @@ public class Administrador extends Usuario {
         super.exibirDados();
         System.out.println("  Administrador | cargo: " + cargo);
     }
+
+    // Implementa o método abstrato de Usuario (aula 09).
+    @Override
+    public String getPerfil() {
+        return "ADMINISTRADOR";
+    }
 }

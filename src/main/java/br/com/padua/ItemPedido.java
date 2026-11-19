@@ -3,12 +3,8 @@ package br.com.padua;
 /*
  * ITEM DO PEDIDO
  *
- * Parecido com ItemCarrinho, com UMA diferença decisiva:
- *
- *   produto        ASSOCIAÇÃO: aponta para o Produto do catálogo
- *                  (para saber o nome, a categoria, baixar o estoque).
- *   quantidade     quantas unidades foram compradas.
- *   precoUnitario  CÓPIA do preço no momento da compra (snapshot).
+ * Aula 09: FILHA de Item (abstrata). Produto e quantidade moram na mãe.
+ * Aqui fica o que é só do pedido: o precoUnitario COPIADO.
  *
  * ItemCarrinho pergunta o preço ao produto toda vez (preço vivo).
  * ItemPedido copiou o número uma vez e nunca mais pergunta. Se o
@@ -18,32 +14,22 @@ package br.com.padua;
  * COMPOSIÇÃO: o item é parte do Pedido. Construtor sem public:
  * quem cria é o Pedido, em adicionarItem.
  */
-public class ItemPedido {
+public class ItemPedido extends Item {
 
-    private Produto produto;
-    private Integer quantidade;
     private Double precoUnitario;
 
     ItemPedido(Produto produto, Integer quantidade) {
-        this.produto = produto;
-        this.quantidade = quantidade;
+        super(produto, quantidade);
         this.precoUnitario = produto.getPreco();   // copia o VALOR, não a referência
-    }
-
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
     }
 
     public Double getPrecoUnitario() {
         return precoUnitario;
     }
 
-    // Usa o preço CONGELADO, nunca produto.getPreco().
+    // Implementa o método ABSTRATO de Item: usa o preço CONGELADO.
+    @Override
     public Double getSubtotal() {
-        return precoUnitario * quantidade;
+        return precoUnitario * getQuantidade();
     }
 }
