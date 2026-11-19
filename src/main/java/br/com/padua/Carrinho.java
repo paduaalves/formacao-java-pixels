@@ -147,6 +147,24 @@ public class Carrinho {
     }
 
     /*
+     * FRETE (aula 09): o carrinho NÃO pergunta se o produto é físico ou
+     * digital. Chama calcularFrete() em cada produto e o Java executa a
+     * versão do objeto de verdade (POLIMORFISMO). Produto novo no futuro?
+     * Esta conta não muda. Regra didática: frete por unidade.
+     */
+    public Double calcularFrete() {
+        Double frete = 0.0;
+        for (ItemCarrinho item : itens) {
+            frete += item.getProduto().calcularFrete() * item.getQuantidade();
+        }
+        return frete;
+    }
+
+    public Double calcularTotalComFrete() {
+        return calcularTotal() + calcularFrete();
+    }
+
+    /*
      * FINALIZAR A COMPRA: a ponte entre Carrinho e Pedido.
      *
      * 1. Recusa carrinho vazio.

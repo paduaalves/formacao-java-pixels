@@ -14,11 +14,16 @@ package br.com.padua;
  * Teste do "é-um": um Cliente É UM Usuario; um Administrador É UM Usuario.
  * Se a frase soa estranha, não é herança (Pedido é um Carrinho? Não!).
  *
+ * AULA 09: Usuario virou ABSTRATA (abstract class). Na loja, todo
+ * usuário é um cliente ou um administrador: new Usuario(...) não faz
+ * sentido e agora nem compila. Mas "Usuario u = new Cliente(...)" pode
+ * (polimorfismo).
+ *
  * Os atributos continuam private (aula 06). As filhas HERDAM os métodos
  * public (getNome, setEmail, autenticar...), mas não enxergam os
  * atributos private da mãe: dentro de Administrador, usamos getNome().
  */
-public class Usuario {
+public abstract class Usuario {
 
     private Integer id;
     private String nome;
@@ -69,6 +74,14 @@ public class Usuario {
     public Boolean autenticar(String email, String senha) {
         return this.senha != null && this.email.equals(email) && this.senha.equals(senha);
     }
+
+    /*
+     * MÉTODO ABSTRATO (aula 09): sem corpo, só a assinatura.
+     * Usuario não sabe qual é o perfil, mas OBRIGA toda filha a dizer.
+     * Cliente devolve "CLIENTE", Administrador devolve "ADMINISTRADOR".
+     * (No Spring, esse texto vira o perfil de acesso: aulas 20+.)
+     */
+    public abstract String getPerfil();
 
     // As filhas vão SOBRESCREVER este método para mostrar os próprios dados.
     public void exibirDados() {

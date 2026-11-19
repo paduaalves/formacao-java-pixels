@@ -104,6 +104,15 @@ public class Produto {
         this.estoque += quantidade;
     }
 
+    /*
+     * FRETE (aula 09): por padrão, produto não tem frete (0.0).
+     * ProdutoFisico SOBRESCREVE com a regra dele. ProdutoDigital herda o
+     * zero e não precisa escrever nada: arquivo não vai de caminhão.
+     */
+    public Double calcularFrete() {
+        return 0.0;
+    }
+
     // Mesma regra da aula 05. Agora altera o preço DE CATÁLOGO do produto.
     public void aplicarDesconto(Double percentual) {
         if (percentual == null || percentual < 0 || percentual > 100 || this.preco == null) {

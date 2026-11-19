@@ -5,47 +5,34 @@ package br.com.padua;
  *
  * Uma linha do carrinho: "2x Mouse sem fio".
  *
- *   produto      ASSOCIAÇÃO: aponta para o Produto do catálogo.
- *   quantidade   quantas unidades o cliente quer levar.
+ * Aula 09: agora é FILHA de Item (abstrata). Produto e quantidade
+ * moram na mãe. Aqui fica só o que é diferente: o subtotal com o
+ * preço VIVO e os métodos que mudam a quantidade.
  *
  * Repare no que NÃO existe aqui: preço guardado. O subtotal sempre
- * pergunta ao produto quanto ele custa AGORA (preço vivo). Se a loja
- * mudar o preço enquanto o cliente ainda está escolhendo, o carrinho
- * mostra o preço novo, como em qualquer loja virtual.
+ * pergunta ao produto quanto ele custa AGORA (preço vivo).
  *
  * COMPOSIÇÃO: o item é PARTE do Carrinho. O construtor não é public
  * (acesso de pacote): quem cria o item é o próprio Carrinho, em adicionar.
  */
-public class ItemCarrinho {
+public class ItemCarrinho extends Item {
 
-    private Produto produto;
-    private Integer quantidade;
-
-    // Sem public: só o pacote br.com.padua cria itens de carrinho.
     ItemCarrinho(Produto produto, Integer quantidade) {
-        this.produto = produto;
-        this.quantidade = quantidade;
+        super(produto, quantidade);
     }
 
-    public Produto getProduto() {
-        return produto;
-    }
-
-    public Integer getQuantidade() {
-        return quantidade;
-    }
-
-    // Preço VIVO: lê o preço do produto no momento da conta.
+    // Implementa o método ABSTRATO de Item: preço VIVO.
+    @Override
     public Double getSubtotal() {
-        return produto.getPreco() * quantidade;
+        return getProduto().getPreco() * getQuantidade();
     }
 
     // Usados pelo Carrinho (mesmo pacote) para mudar a quantidade.
     void aumentarQuantidade(Integer quantidade) {
-        this.quantidade += quantidade;
+        setQuantidade(getQuantidade() + quantidade);
     }
 
     void definirQuantidade(Integer quantidade) {
-        this.quantidade = quantidade;
+        setQuantidade(quantidade);
     }
 }

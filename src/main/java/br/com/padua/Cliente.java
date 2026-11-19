@@ -58,4 +58,10 @@ public class Cliente extends Usuario {
         super.exibirDados();
         System.out.println("  Cliente | CPF " + cpf + " | tel. " + telefone + " | " + endereco);
     }
+
+    // Implementa o método abstrato de Usuario (aula 09).
+    @Override
+    public String getPerfil() {
+        return "CLIENTE";
+    }
 }
